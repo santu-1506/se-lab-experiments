@@ -1,1 +1,281 @@
 https://santu-1506.github.io/se-lab-experiments/
+
+
+Docker with nginx
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+0. Before starting
+
+Start Docker Desktop on Windows
+
+Open Docker Desktop from Start menu
+
+Wait until it says “Docker Engine is running”
+
+Open PowerShell (or CMD) and check:
+
+docker --version
+
+🐳 1. Create Ubuntu container with port mapping
+
+In PowerShell, run:
+
+cd C:\3-1\se   # (or any folder you like)
+docker run -it -p 3000:80 --name myubuntu ubuntu
+
+
+-it → interactive terminal
+
+--name myubuntu → container name
+
+-p 3000:80 → host port 3000 → container port 80
+
+ubuntu → image
+
+Now your prompt changes to:
+
+root@<container-id>:/#
+
+
+You are inside the container (Ubuntu shell).
+
+🌐 2. Update packages & install Nginx
+
+Inside the container:
+
+apt update
+apt install nginx -y
+
+
+This installs the Nginx web server.
+
+▶️ 3. Start Nginx
+
+Still inside container:
+
+service nginx start
+
+
+(or just nginx)
+
+If it prints [ OK ], Nginx is running and listening on port 80 inside container.
+
+✍️ 4. Install nano (text editor)
+
+Ubuntu base image doesn’t have nano, so:
+
+apt install nano -y
+
+📝 5. Create/Edit the web page
+
+Go to the web root:
+
+cd /var/www/html
+
+
+Create or edit index.html:
+
+nano index.html
+
+
+Paste something like:
+
+<html>
+  <body>
+    <h1>Hello from Santu's Docker Nginx Container!</h1>
+  </body>
+</html>
+
+
+Save in nano:
+
+CTRL + O → ENTER
+
+CTRL + X
+
+🌍 6. View in browser (on Windows)
+
+Now, on your host (Windows):
+
+Open Chrome and go to:
+
+http://localhost:3000
+
+
+You should see your custom message (or default “Welcome to nginx!” if you didn’t change the file).
+
+Why 3000?
+Because you mapped -p 3000:80 when creating the container.
+
+🚪 7. Exiting & managing the container
+Exit from container shell (but keep server running):
+
+Inside container:
+
+exit
+
+
+Now you’re back to:
+
+PS C:\3-1\se>
+
+Check running containers:
+docker ps
+
+
+You should see myubuntu with 0.0.0.0:3000->80/tcp.
+
+Stop the container:
+docker stop myubuntu
+
+Start it again later:
+docker start myubuntu
+
+Enter it again:
+docker exec -it myubuntu bash
+
+Remove container (if you want to recreate):
+docker rm myubuntu
+
+🗣️ What to say in viva (super short)
+
+Command to run Ubuntu container with Nginx and expose it:
+
+docker run -it -p 3000:80 --name myubuntu ubuntu
+
+
+Inside container:
+
+apt update
+
+apt install nginx -y
+
+service nginx start
+
+cd /var/www/html
+
+nano index.html → write HTML
+
+Access from browser:
+http://localhost:3000
+
+Important concepts:
+
+Container is isolated OS
+
+Port mapping -p hostPort:containerPort
+
+Docker CLI used: docker run, docker ps, docker stop, docker start, docker exec, docker rm
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+docker compose
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. Create a new folder
+mkdir docker-compose-exp
+cd docker-compose-exp
+
+✅ 2. Create docker-compose.yml
+
+Run:
+
+notepad docker-compose.yml
+
+
+Paste this (same as SE lab record):
+
+version: '3'
+services:
+  web:
+    image: nginx
+    ports:
+      - "3000:80"
+  redis:
+    image: redis:alpine
+
+
+Save & close.
+
+✅ 3. Start Docker Compose stack
+
+Inside the same folder:
+
+docker-compose up
+
+
+What happens:
+
+✔ It creates web container (nginx)
+✔ It creates redis container
+✔ Both start together
+✔ Logs are shown in terminal
+
+This is exact expected output in the PDF.
+
+✅ 4. Open browser and check
+
+Go to:
+
+👉 http://localhost:3000
+
+You should see the Nginx default page:
+
+Welcome to nginx!
+
+
+This proves Compose is working.
+
+✅ 5. Stop the services
+
+In the same terminal:
+
+Press CTRL + C to stop logs.
+
+Then run:
+
+docker-compose down
+
+
+This removes:
+
+✔ containers
+✔ network
+✔ but keeps images
+
+This is what external expects.
+
+🎯 Viva Questions (You MUST say these)
+1. What is Docker Compose?
+
+A tool used to run multi-container applications using a single YAML file.
+
+2. What is the default file name?
+
+docker-compose.yml
+
+3. How do you start all services?
+docker-compose up
+
+4. How do you stop and remove all services?
+docker-compose down
+
+5. What is a service in Compose?
+
+A definition of a container (like web, redis).
+
+6. What does ports: "3000:80" mean?
+
+Host port 3000 maps to container port 80.
+
+7. Why use Compose?
+
+Because it manages multiple containers with one command.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
