@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE Lab Experiments - Quick Reference</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Software Engineering Lab Experiments</h1>
+            <p class="subtitle">Quick Reference Guide for External Exam</p>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search experiments..." onkeyup="searchExperiments()">
+        </div>
+
+        <div class="experiments-grid" id="experimentsGrid">
+            <!-- Experiment cards will be dynamically loaded here -->
+        </div>
+
+        <div class="modal" id="experimentModal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js?v=8"></script>
+</body>
+</html>
+
